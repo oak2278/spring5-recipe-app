@@ -3,7 +3,7 @@ package guru.springframework.models;
 import javax.persistence.*;
 
 @Entity
-public class Notes {
+public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
