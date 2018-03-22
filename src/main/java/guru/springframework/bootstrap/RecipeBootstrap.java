@@ -4,15 +4,18 @@ import guru.springframework.models.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 
@@ -27,8 +30,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading Bootstrap Data");
     }
 
     private List<Recipe> getRecipes(){
@@ -173,16 +178,16 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacoRecipe.setSource("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         tacoRecipe.setDifficulty(Difficulty.MODERATE);
         tacoRecipe.getCategories().add(mexicanCategory);
-        tacoRecipe.getIngredients().add(new Ingredient("ancho chile powder", new BigDecimal(2),tblUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("dried oregano", new BigDecimal(1), teaUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("dried cumin", new BigDecimal(1), teaUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("sugar", new BigDecimal(1), teaUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("salt", new BigDecimal(.5), teaUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("finely chopped garlic clove", new BigDecimal(1), eachUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("finely grated orange zest", new BigDecimal(1), tblUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("fresh squeezed Orange Juice", new BigDecimal(3), tblUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("Olive Oil", new BigDecimal(2), tblUom, tacoRecipe));
-        tacoRecipe.getIngredients().add(new Ingredient("chicken thighs", new BigDecimal(5), eachUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("ancho chile powder", new BigDecimal(2),tblUom));
+        tacoRecipe.addIngredient(new Ingredient("dried oregano", new BigDecimal(1), teaUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("dried cumin", new BigDecimal(1), teaUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("sugar", new BigDecimal(1), teaUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("salt", new BigDecimal(.5), teaUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("finely chopped garlic clove", new BigDecimal(1), eachUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("finely grated orange zest", new BigDecimal(1), tblUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("fresh squeezed Orange Juice", new BigDecimal(3), tblUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("Olive Oil", new BigDecimal(2), tblUom, tacoRecipe));
+        tacoRecipe.addIngredient(new Ingredient("chicken thighs", new BigDecimal(5), eachUom, tacoRecipe));
 
         tacoNotes.setRecipe(tacoRecipe);
         guacNotes.setRecipe(guacRecipe);
